@@ -3,7 +3,7 @@
 # All scripts and apps are fetched from the test branch
 
 Write-Host "===== TEST SETUP MENU =====" -ForegroundColor Cyan
-Write-Host "⚠️ This is SANDBOX MODE. Your real Scoop install will NOT be affected."
+Write-Host "WARNING: This is SANDBOX MODE. Your real Scoop install will NOT be affected."
 Write-Host ""
 Write-Host "1. Install test environment"
 Write-Host "2. Self-destruct test environment"
@@ -24,4 +24,4 @@ switch ($choice) {
 }
 
 Write-Host ""
-Write-Host "✅ Menu execution complete. Sandbo
+Write-Host "Menu execution complete. Sandbox scripts ran from test branch." -ForegroundColor Cyan
