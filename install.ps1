@@ -1,5 +1,5 @@
 # install.ps1
-# Installs Scoop and desired applications
+# Installs Scoop and applications listed in apps.txt
 
 Write-Host "Starting installation..." -ForegroundColor Cyan
 
@@ -24,8 +24,9 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
 Write-Host "Adding extras bucket..." -ForegroundColor Green
 scoop bucket add extras
 
-# Apps to install
-$apps = @("aria2", "speedtest-cli", "fastfetch", "cpufetch", "brave", "mullvad-browser", "qbittorrent-enhanced")
+# Fetch app list from GitHub (always up-to-date)
+$appListUrl = "https://raw.githubusercontent.com/beyondsafa/scsetup/main/apps.txt"
+$apps = (irm $appListUrl) -split "`n" | ForEach-Object { $_.Trim() } | Where-Object {$_ -ne ""}
 
 foreach ($app in $apps) {
     if (-not (scoop list | Select-String $app)) {
