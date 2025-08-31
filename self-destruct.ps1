@@ -1,5 +1,5 @@
 # self-destruct.ps1 (TEST BRANCH)
-# Nukes only sandbox Scoop install
+# Nukes only sandbox Scoop install, no admin required
 
 Write-Host "TEST MODE: Self-destruct initialized (sandbox only)..." -ForegroundColor Red
 
@@ -21,8 +21,8 @@ try {
     # Suppress errors
 }
 
-# Clear environment variables
+# Clear only user-level environment variables
 [Environment]::SetEnvironmentVariable('SCOOP', $null, 'User')
-[Environment]::SetEnvironmentVariable('SCOOP_GLOBAL', $null, 'Machine')
+[Environment]::SetEnvironmentVariable('SCOOP_GLOBAL', $null, 'User')
 
 Write-Host "Sandbox Scoop obliterated (TEST MODE)." -ForegroundColor Cyan
