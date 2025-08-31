@@ -1,7 +1,7 @@
 # install.ps1 (TEST BRANCH)
 # Installs Scoop in sandbox location and apps from apps.txt
 
-Write-Host "⚠️ TEST MODE: Scoop will be installed in a sandbox at $env:USERPROFILE\scoop-test" -ForegroundColor Yellow
+Write-Host "WARNING: TEST MODE. Scoop will be installed in a sandbox at $env:USERPROFILE\scoop-test" -ForegroundColor Yellow
 
 # Force Scoop environment
 $env:SCOOP = "$env:USERPROFILE\scoop-test"
@@ -41,4 +41,4 @@ foreach ($app in $apps) {
     }
 }
 
-Write-Host "✅ Test installation complete." -ForegroundColor Cyan
+Write-Host "Test installation complete." -ForegroundColor Cyan
