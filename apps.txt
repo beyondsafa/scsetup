@@ -1,0 +1,7 @@
+aria2
+speedtest-cli
+fastfetch
+cpufetch
+brave
+mullvad-browser
+qbittorrent-enhanced
