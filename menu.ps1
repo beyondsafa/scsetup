@@ -3,7 +3,7 @@
 
 Write-Host "===== Setup Menu =====" -ForegroundColor Cyan
 Write-Host "1. Install environment"
-Write-Host "2. Self-destruct"
+Write-Host "2. Self-destruct (remove Scoop & apps)"
 $choice = Read-Host "Enter 1 or 2"
 
 switch ($choice) {
