@@ -1,29 +1,28 @@
-# self-destruct.ps1
-# Removes Scoop and all traces
+# self-destruct.ps1 (TEST BRANCH)
+# Nukes only sandbox Scoop install
 
-Write-Host "Self-destruct initiated..." -ForegroundColor Red
+Write-Host "💀 TEST MODE: Self-destruct initialized (sandbox only)..." -ForegroundColor Red
 
-# Try to uninstall apps and remove bucket
+# Test Scoop directories
+$scoopDir    = "$env:USERPROFILE\scoop-test"
+$scoopGlobal = "$env:ProgramData\scoop-test"
+
+# Remove Scoop dirs
 try {
-    scoop uninstall *
-    scoop bucket rm extras
+    if (Test-Path $scoopDir) {
+        Write-Host "Removing $scoopDir ..." -ForegroundColor Yellow
+        Remove-Item -Recurse -Force $scoopDir
+    }
+    if (Test-Path $scoopGlobal) {
+        Write-Host "Removing $scoopGlobal ..." -ForegroundColor Yellow
+        Remove-Item -Recurse -Force $scoopGlobal
+    }
 } catch {
-    Write-Host "Cleanup continuing..." -ForegroundColor Yellow
+    # Suppress errors
 }
 
-# Remove Scoop directories
-$scoopDir = "$env:USERPROFILE\scoop"
-$scoopGlobal = "$env:ProgramData\scoop"
-
-if (Test-Path $scoopDir) {
-    Remove-Item -Recurse -Force $scoopDir
-}
-if (Test-Path $scoopGlobal) {
-    Remove-Item -Recurse -Force $scoopGlobal
-}
-
-# Remove environment variables
+# Clear env vars for test scoop
 [Environment]::SetEnvironmentVariable('SCOOP', $null, 'User')
 [Environment]::SetEnvironmentVariable('SCOOP_GLOBAL', $null, 'Machine')
 
-Write-Host "Scoop and all installed applications removed." -ForegroundColor Cyan
+Write-Host "🔥 Sandbox Scoop obliterated (TEST MODE)." -ForegroundColor Cyan
