@@ -1,0 +1,19 @@
+OneTab|onetab|extension@one-tab.com
+Tabliss - New Tab|tabliss|extension@tabliss.io
+Dark Reader|darkreader|addon@darkreader.org
+Privacy Badger|privacy-badger17|privacybadger@eff.org
+Decentraleyes|decentraleyes|jid1-BoFifL9Vbdl2zQ@jetpack
+ClearURLs|clearurls|clearurls@kevinr.fun
+I still don't care about cookies|i-still-dont-care-about-cookies|jid1-KKzOGWgsW3Ao4Q@jetpack
+CanvasBlocker|canvasblocker|CanvasBlocker@kkapsner.de
+Disconnect|disconnect|2.0@disconnect.me
+Search by Image|search_by_image|jid1-rpKXEm4WlGOsUg@jetpack
+Raindrop.io|raindropio|raindrop-io@raindrop.io
+Bitwarden|bitwarden-password-manager|{446900e4-71c2-419f-a6a7-df9c091e268b}
+uBlock Origin|ublock-origin|uBlock0@raymondhill.net
+EPUBReader|epubreader|jid1-IzIl5Q7n6G0X3g@jetpack
+TWP - Translate Web Pages|translate-web-pages|translatewebpages@extensions.com
+Adaptive Tab Bar Color|adaptive-tab-bar-colour|adaptive-tab-bar-color@mozilla.org
+Gesturefy|gesturefy|{8fbc40b8-1f3f-4a43-b418-1a1c7f7b1e1b}
+Windscribe|windscribe|{bb924774-2a59-4f53-bb29-1fbf135a9a39}
+Browsec|browsec|{b8c08a55-21a5-4f7b-a9e4-1a5cfa7bb9f1}
