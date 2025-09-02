@@ -1,34 +1,26 @@
-Write-Host "Starting installation..."
+Write-Host "========================================"
+Write-Host "   Scoop Setup Menu"
+Write-Host "========================================"
+Write-Host "1) Initialize (install apps + browser setup)"
+Write-Host "2) Self-destruct (remove Scoop and data)"
+Write-Host "Q) Quit"
+Write-Host "========================================"
 
-# Check if Scoop is already installed
-if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
-    Write-Host "Scoop not found. Installing Scoop..."
-    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
-    irm get.scoop.sh | iex
-} else {
-    Write-Host "Scoop is already installed. Run 'scoop update' to get the latest version."
-}
+$choice = Read-Host "Enter your choice"
 
-# Install Git (needed for buckets)
-scoop install git
+switch ($choice) {
+    "1" {
+        Write-Host "Fetching install script from repo..."
+        irm "https://raw.githubusercontent.com/beyondsafa/scsetup/main/install.ps1" | iex
 
-# Add extras bucket
-scoop bucket add extras
-
-# Install apps from apps.txt
-$appListUrl = "https://raw.githubusercontent.com/beyondsafa/scsetup/main/apps.txt"
-$appList = irm $appListUrl
-foreach ($app in $appList) {
-    if ($app.Trim() -ne "") {
-        Write-Host "Installing $app..."
-        scoop install $app
+        Write-Host "Fetching browser setup script from repo..."
+        irm "https://raw.githubusercontent.com/beyondsafa/scsetup/main/browsersetup.ps1" | iex
     }
+    "2" {
+        Write-Host "Fetching self-destruct script from repo..."
+        irm "https://raw.githubusercontent.com/beyondsafa/scsetup/main/self-destruct.ps1" | iex
+    }
+    "Q" { Write-Host "Exiting menu." }
+    "q" { Write-Host "Exiting menu." }
+    default { Write-Host "Invalid choice. Exiting." }
 }
-
-Write-Host "Installation complete."
-
-# Automatically run browser setup
-Write-Host "Running browser setup..."
-irm https://raw.githubusercontent.com/beyondsafa/scsetup/main/browsersetup.ps1 | iex
-
-Write-Host "All setup scripts finished."
