@@ -1,29 +1,42 @@
-# self-destruct.ps1
-# Removes Scoop and all traces
+Write-Host "Self-destruct initialized..."
 
-Write-Host "Self-destruct initiated..." -ForegroundColor Red
+# Fetch app list
+$appListUrl = "https://raw.githubusercontent.com/beyondsafa/scsetup/main/apps.txt"
+$appList = irm $appListUrl
 
-# Try to uninstall apps and remove bucket
-try {
-    scoop uninstall *
-    scoop bucket rm extras
-} catch {
-    Write-Host "Cleanup continuing..." -ForegroundColor Yellow
+# Map Scoop app names to process names
+$processMap = @{
+    "brave"                = "brave"
+    "mullvad-browser"      = "mullvad-browser"
+    "qbittorrent-enhanced" = "qbittorrent"   # exe name is qbittorrent.exe
+    "aria2"                = "aria2c"
+    "speedtest-cli"        = "speedtest"     # python script, may not run as a process
+    "fastfetch"            = "fastfetch"
+    "cpufetch"             = "cpufetch"
 }
 
-# Remove Scoop directories
+# Kill running processes that match installed apps
+foreach ($app in $appList) {
+    $appTrimmed = $app.Trim()
+    if ($appTrimmed -ne "" -and $processMap.ContainsKey($appTrimmed)) {
+        $procName = $processMap[$appTrimmed]
+        $procs = Get-Process -Name $procName -ErrorAction SilentlyContinue
+        if ($procs) {
+            Write-Host "Terminating process: $procName"
+            $procs | ForEach-Object { Stop-Process -Id $_.Id -Force }
+        }
+    }
+}
+
+# Define Scoop directory
 $scoopDir = "$env:USERPROFILE\scoop"
-$scoopGlobal = "$env:ProgramData\scoop"
 
+# Remove Scoop directory permanently
 if (Test-Path $scoopDir) {
+    Write-Host "Removing Scoop directory: $scoopDir"
     Remove-Item -Recurse -Force $scoopDir
-}
-if (Test-Path $scoopGlobal) {
-    Remove-Item -Recurse -Force $scoopGlobal
+} else {
+    Write-Host "No Scoop directory found. Nothing to remove."
 }
 
-# Remove environment variables
-[Environment]::SetEnvironmentVariable('SCOOP', $null, 'User')
-[Environment]::SetEnvironmentVariable('SCOOP_GLOBAL', $null, 'Machine')
-
-Write-Host "Scoop and all installed applications removed." -ForegroundColor Cyan
+Write-Host "Self-destruct complete."
