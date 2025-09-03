@@ -4,7 +4,7 @@ Dark Reader|darkreader|addon@darkreader.org
 Privacy Badger|privacy-badger17|privacybadger@eff.org
 Decentraleyes|decentraleyes|jid1-BoFifL9Vbdl2zQ@jetpack
 ClearURLs|clearurls|clearurls@kevinr.fun
-I still don't care about cookies|i-still-dont-care-about-cookies|jid1-KKzOGWgsW3Ao4Q@jetpack
+I still don't care about cookies|istilldontcareaboutcookies|jid1-KKzOGWgsW3Ao4Q@jetpack
 CanvasBlocker|canvasblocker|CanvasBlocker@kkapsner.de
 Disconnect|disconnect|2.0@disconnect.me
 Search by Image|search_by_image|jid1-rpKXEm4WlGOsUg@jetpack
