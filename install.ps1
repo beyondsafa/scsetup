@@ -24,6 +24,11 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
 Write-Host "Adding extras bucket..." -ForegroundColor Green
 scoop bucket add extras
 
+# Add beeper bucket
+Write-Host "Adding beeper bucket..." -ForegroundColor Blue
+scoop bucket add beeper https://github.com/beyondsafa/scoop-beeper.git
+
+
 # Fetch app list from GitHub (always up-to-date)
 $appListUrl = "https://raw.githubusercontent.com/beyondsafa/scsetup/main/apps.txt"
 $apps = (irm $appListUrl) -split "`n" | ForEach-Object { $_.Trim() } | Where-Object {$_ -ne ""}
