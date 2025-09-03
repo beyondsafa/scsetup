@@ -1,13 +1,16 @@
-# browsersetup.ps1
-# Scoop-based Mullvad Browser Extension Setup (Fallback only)
+# Scoop-based Mullvad Browser Extension Setup
 
 $ErrorActionPreference = "Stop"
 
 # Paths
 $scoopDir   = Join-Path $env:USERPROFILE "scoop"
 $aria2Path  = Join-Path (Join-Path $scoopDir "shims") "aria2c.exe"
-$extFile    = Join-Path $PSScriptRoot "extensions.txt"
+$extFile    = Join-Path $env:TEMP "extensions.txt"  # Download to temp
 $extOutDir  = Join-Path $scoopDir "extensions"
+
+# Download extensions.txt from GitHub
+$extensionsUrl = "https://raw.githubusercontent.com/beyondsafa/scsetup/main/extensions.txt"
+Invoke-WebRequest -Uri $extensionsUrl -OutFile $extFile
 
 # Ensure aria2 exists
 if (-not (Test-Path $aria2Path)) {
@@ -22,7 +25,7 @@ if (-not (Test-Path $extOutDir)) {
 
 # Read extensions.txt
 if (-not (Test-Path $extFile)) {
-    Write-Error "extensions.txt not found in $PSScriptRoot"
+    Write-Error "extensions.txt not found in $extFile"
     exit 1
 }
 
