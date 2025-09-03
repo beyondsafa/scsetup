@@ -5,3 +5,4 @@ cpufetch
 brave
 mullvad-browser
 qbittorrent-enhanced
+beeper
