@@ -43,6 +43,11 @@ foreach ($line in $extensions) {
     $url   = "https://addons.mozilla.org/firefox/downloads/latest/$slug/latest.xpi"
     $out   = Join-Path $extOutDir ("$slug.xpi")
 
+    if (Test-Path $out) {
+        Write-Host "$name already exists at $out, skipping download."
+        continue
+    }
+
     Write-Host "Downloading $name..."
     & $aria2Path --max-connection-per-server=5 --split=5 --min-split-size=1M --retry-wait=3 --max-tries=5 -o (Split-Path $out -Leaf) -d (Split-Path $out) $url
 
