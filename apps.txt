@@ -1,4 +1,6 @@
 aria2
+btop
+neohtop
 speedtest-cli
 fastfetch
 cpufetch
