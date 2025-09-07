@@ -10,3 +10,6 @@ qbittorrent-enhanced
 beeper
 alacritty
 scrcpy
+twinkle-tray
+warp-terminal
+wgcf
