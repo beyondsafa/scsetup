@@ -5,7 +5,7 @@ speedtest-cli
 fastfetch
 cpufetch
 brave
-mullvad-browser
+firefox
 qbittorrent-enhanced
 beeper
 alacritty
