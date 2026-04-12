@@ -1,61 +1,29 @@
-# scsetup
+## Drive Letter Configuration
 
-PS scripts to get me running and leaving
+### Scoop Installation on Custom Drives
 
-## Overview
+You can configure Scoop to manage installations on custom drive letters by following these steps:
 
-A collection of PowerShell scripts designed to quickly set up and configure your system for development and daily productivity.
+1. **Install Scoop**:
+   You can install Scoop on any drive by running the installation command from the desired drive letter. For example:
+   ```powershell
+   # Open PowerShell
+   cd D:\
+   iwr get.scoop.sh -useb | iex
+   ```
 
-## Features
+2. **Set Up Custom Directory**:
+   To set up Scoop on a custom drive, use the `SCOOP` environment variable to point to your desired installation path. You can do this by adding the following line to your PowerShell profile:
+   ```powershell
+   $env:SCOOP='D:\scoop'
+   ```
 
-- 🚀 Quick system setup automation
-- ⚡ Fast initialization scripts
-- 🛠️ Development environment configuration
-- 📦 Dependency management
+3. **Verify Installation**:
+   Verify that Scoop is installed by running:
+   ```powershell
+   scoop help
+   ```
 
-## Prerequisites
+This will confirm that any installations or applications you manage through Scoop can be accessed and executed properly from the custom drive setup.
 
-- Windows operating system
-- PowerShell 5.0 or higher
-- Administrator privileges (for some scripts)
-
-## Installation
-
-1. Clone this repository:
-```powershell
-git clone https://github.com/beyondsafa/scsetup.git
-cd scsetup
-```
-
-2. (Optional) Set execution policy to allow script execution:
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-## Usage
-
-Navigate to the repository directory and run the scripts you need:
-
-```powershell
-.\script-name.ps1
-```
-
-## Scripts
-
-Add descriptions of your PowerShell scripts here:
-
-- `setup.ps1` - Main setup script
-- `configure.ps1` - Configuration script
-- *Add more scripts as applicable*
-
-## Contributing
-
-Feel free to submit issues and pull requests.
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Author
-
-[@beyondsafa](https://github.com/beyondsafa)
+Feel free to reach out for any additional information or troubleshooting steps on the setup process!
