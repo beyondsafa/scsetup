@@ -1,61 +1,20 @@
-# Scoop-based Mullvad Browser Extension Setup
+# Script for Browser Setup
 
-$ErrorActionPreference = "Stop"
+# This script sets up browsers for use with custom Scoop directory locations.
 
-# Paths
-$scoopDir   = Join-Path $env:USERPROFILE "scoop"
-$aria2Path  = Join-Path (Join-Path $scoopDir "shims") "aria2c.exe"
-$extFile    = Join-Path $env:TEMP "extensions.txt"  # Download to temp
-$extOutDir  = Join-Path $scoopDir "extensions"
-
-# Download extensions.txt from GitHub
-$extensionsUrl = "https://raw.githubusercontent.com/beyondsafa/scsetup/main/extensions.txt"
-Invoke-WebRequest -Uri $extensionsUrl -OutFile $extFile
-
-# Ensure aria2 exists
-if (-not (Test-Path $aria2Path)) {
-    Write-Error "aria2c.exe not found at $aria2Path. Make sure Scoop installed it."
-    exit 1
+# Define environment variable for custom Scoop directory if set
+if ($env:SCOOP_ROOT -ne $null) {
+    $scoopRoot = $env:SCOOP_ROOT
+} else {
+    $scoopRoot = "$HOME\scoop"
 }
 
-# Ensure output directory
-if (-not (Test-Path $extOutDir)) {
-    New-Item -ItemType Directory -Path $extOutDir | Out-Null
-}
+# Path to the browsers installation in the Scoop directory
+$browsersPath = "$scoopRoot\shims"
 
-# Read extensions.txt
-if (-not (Test-Path $extFile)) {
-    Write-Error "extensions.txt not found in $extFile"
-    exit 1
-}
+# Install or set up browsers with Scoop
+scoop install firefox
+scoop install chrome
+scoop install edge
 
-$extensions = Get-Content $extFile | Where-Object { $_ -and ($_ -notmatch "^\s*#") }
-
-foreach ($line in $extensions) {
-    $parts = $line -split "\|"
-    if ($parts.Count -lt 2) {
-        Write-Warning "Skipping malformed line: $line"
-        continue
-    }
-
-    $name  = $parts[0].Trim()
-    $slug  = $parts[1].Trim()
-    $url   = "https://addons.mozilla.org/firefox/downloads/latest/$slug/latest.xpi"
-    $out   = Join-Path $extOutDir ("$slug.xpi")
-
-    if (Test-Path $out) {
-        Write-Host "$name already exists at $out, skipping download."
-        continue
-    }
-
-    Write-Host "Downloading $name..."
-    & $aria2Path --max-connection-per-server=5 --split=5 --min-split-size=1M --retry-wait=3 --max-tries=5 -o (Split-Path $out -Leaf) -d (Split-Path $out) $url
-
-    if ($LASTEXITCODE -ne 0) {
-        Write-Warning "aria2 failed to download $name. Exit code: $LASTEXITCODE"
-    } else {
-        Write-Host "$name downloaded to $out"
-    }
-}
-
-Write-Host "All downloads attempted. You can install extensions manually by dragging them into Mullvad Browser."
+Write-Host "Browsers have been set up in: $browsersPath"
