@@ -1,12 +1,13 @@
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 
-$ScoopDir = "D:\scoop"
+# Renamed from $ScoopDir to avoid clashing with Scoop's internal installer variables
+$TargetDir = "D:\scoop" 
 
 # 1. Establish Environment Path
 if (-not $env:SCOOP) {
-    [Environment]::SetEnvironmentVariable('SCOOP', $ScoopDir, 'User')
-    $env:SCOOP = $ScoopDir
+    [Environment]::SetEnvironmentVariable('SCOOP', $TargetDir, 'User')
+    $env:SCOOP = $TargetDir
 }
 
 # 2. Install Scoop if missing
