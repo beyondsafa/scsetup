@@ -1,94 +1,35 @@
-# install.ps1
-# Installs Scoop and applications listed in apps.txt
-# Now with support for custom drive letter installation
+$ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
 
-Write-Host "================================" -ForegroundColor Cyan
-Write-Host "   Scoop Setup with Drive Selection" -ForegroundColor Cyan
-Write-Host "================================" -ForegroundColor Cyan
+$ScoopDir = "D:\scoop"
 
-# Prompt for drive letter
-$driveLetter = Read-Host "Which drive would you like to install Scoop on? (e.g., D, E, F)"
-$driveLetter = $driveLetter.ToUpper().TrimEnd(':')
-
-# Validate drive
-if ($driveLetter -notmatch '^[A-Z]$') {
-    Write-Host "Invalid drive letter. Please use a single letter (A-Z)." -ForegroundColor Red
-    exit 1
+# 1. Establish Environment Path
+if (-not $env:SCOOP) {
+    [Environment]::SetEnvironmentVariable('SCOOP', $ScoopDir, 'User')
+    $env:SCOOP = $ScoopDir
 }
 
-$scoopPath = "$($driveLetter):\scoop"
-$scoopGlobalPath = "$($driveLetter):\scoop-global"
-
-Write-Host "Scoop will be installed to: $scoopPath" -ForegroundColor Yellow
-Write-Host "Global apps will be installed to: $scoopGlobalPath" -ForegroundColor Yellow
-
-# Verify drive exists
-if (-not (Test-Path "$($driveLetter):\")) {
-    Write-Host "Drive $driveLetter does not exist or is not accessible." -ForegroundColor Red
-    exit 1
-}
-
-# Set environment variables permanently
-[Environment]::SetEnvironmentVariable("SCOOP", $scoopPath, "User")
-[Environment]::SetEnvironmentVariable("SCOOP_GLOBAL", $scoopGlobalPath, "User")
-$env:SCOOP = $scoopPath
-$env:SCOOP_GLOBAL = $scoopGlobalPath
-
-Write-Host "Environment variables set:" -ForegroundColor Green
-Write-Host "  SCOOP = $env:SCOOP" -ForegroundColor Green
-Write-Host "  SCOOP_GLOBAL = $env:SCOOP_GLOBAL" -ForegroundColor Green
-
-# Create directories
-if (-not (Test-Path $scoopPath)) {
-    New-Item -ItemType Directory -Path $scoopPath -Force | Out-Null
-    Write-Host "Created directory: $scoopPath" -ForegroundColor Green
-}
-
-if (-not (Test-Path $scoopGlobalPath)) {
-    New-Item -ItemType Directory -Path $scoopGlobalPath -Force | Out-Null
-    Write-Host "Created directory: $scoopGlobalPath" -ForegroundColor Green
-}
-
-Write-Host "Starting installation..." -ForegroundColor Cyan
-
-# Install Scoop
+# 2. Install Scoop if missing
 if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
-    Write-Host "Installing Scoop..." -ForegroundColor Green
-    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
-    irm get.scoop.sh | iex
-} else {
-    Write-Host "Scoop already installed." -ForegroundColor Yellow
+    Write-Host "Installing Scoop..."
+    Invoke-RestMethod -Uri get.scoop.sh | Invoke-Expression
 }
 
-# Ensure Git is installed
-if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
-    Write-Host "Installing Git..." -ForegroundColor Green
-    scoop install git
-} else {
-    Write-Host "Git already installed." -ForegroundColor Yellow
+# 3. Add necessary buckets
+$existingBuckets = scoop bucket list
+if ($existingBuckets -notmatch "extras") {
+    scoop bucket add extras
 }
 
-# Add buckets
-Write-Host "Adding extras bucket..." -ForegroundColor Green
-scoop bucket add extras
-
-Write-Host "Adding beeper bucket..." -ForegroundColor Blue
-scoop bucket add beeper https://github.com/beyondsafa/scoop-beeper.git
-
-# Fetch and install apps
-$appListUrl = "https://raw.githubusercontent.com/beyondsafa/scsetup/main/apps.txt"
-$apps = (irm $appListUrl) -split "`n" | ForEach-Object { $_.Trim() } | Where-Object {$_ -ne ""}
-
-foreach ($app in $apps) {
-    if (-not (scoop list | Select-String $app)) {
-        Write-Host "Installing $app ..." -ForegroundColor Green
-        scoop install $app
-    } else {
-        Write-Host "$app already installed." -ForegroundColor Yellow
+# 4. Read untouched apps.txt and install
+$appsFile = ".\apps.txt"
+if (Test-Path $appsFile) {
+    # Reads the file, ignoring empty spaces
+    $apps = Get-Content $appsFile | Where-Object { $_ -match '\S' -and -not $_.StartsWith('#') }
+    if ($apps) {
+        Write-Host "Installing packages from apps.txt..."
+        scoop install @apps
     }
+} else {
+    Write-Host "apps.txt not found. Skipping."
 }
-
-Write-Host "================================" -ForegroundColor Cyan
-Write-Host "Installation complete!" -ForegroundColor Cyan
-Write-Host "All Scoop data is stored on: $driveLetter" -ForegroundColor Green
-Write-Host "================================" -ForegroundColor Cyan
